@@ -1,8 +1,6 @@
 import streamlit as st
-import pandas as pd
 from datetime import datetime
-import gspread
-from google.oauth2.service_account import Credentials
+import json
 
 # Configurar página
 st.set_page_config(page_title="PMV Romiplostim", layout="wide")
@@ -217,17 +215,18 @@ st.divider()
 st.subheader("📊 Historial de envíos")
 
 if "historial" in st.session_state and st.session_state.historial:
-    df_historial = pd.DataFrame(st.session_state.historial)
-    st.dataframe(df_historial, use_container_width=True)
+    # Mostrar como tabla simple sin pandas
+    st.write("### Registros:")
+    for i, reg in enumerate(st.session_state.historial, 1):
+        st.write(f"**{i}.** {reg['Fecha']} | {reg['Hematólogo']} | {reg['Tema']}")
     
-    # Opción para descargar
-    csv = df_historial.to_csv(index=False)
+    # Descargar como JSON
+    historial_json = json.dumps(st.session_state.historial, ensure_ascii=False, indent=2)
     st.download_button(
-        label="📥 Descargar historial (CSV)",
-        data=csv,
-        file_name="historial_envios.csv",
-        mime="text/csv"
+        label="📥 Descargar historial (JSON)",
+        data=historial_json,
+        file_name="historial_envios.json",
+        mime="application/json"
     )
 else:
     st.info("Sin registros aún")
-
