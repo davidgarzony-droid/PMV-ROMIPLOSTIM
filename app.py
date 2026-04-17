@@ -7,10 +7,10 @@ st.set_page_config(page_title="PMV Romiplostim", layout="wide")
 st.title("📧 Gestor de Comunicaciones - APM")
 
 # ============================================
-# DATOS REALES (extraídos de tu Sheet)
+# DATOS (hardcodeados - sin Sheet)
 # ============================================
 
-# Base de hematólogos (del Sheet "Segmentación")
+# Base de hematólogos
 hematologos = {
     "Dr. Juan Pérez": "Reconocimiento Profesional",
     "Dra. María García": "Prestigio Médico",
@@ -23,7 +23,7 @@ hematologos = {
     "Dr. Andrés Díaz": "Confianza Clínica"
 }
 
-# Matriz de temas × variantes (del Sheet "Toolkit")
+# Matriz de temas × variantes
 matriz_contenidos = {
     "Eficacia Clínica": {
         "Reconocimiento Profesional": {
@@ -191,7 +191,6 @@ if cliente and tema:
     
     # Botón para registrar
     if st.button("✅ Registrar envío", key="register"):
-        # Guardar en historial (sesión temporal)
         if "historial" not in st.session_state:
             st.session_state.historial = []
         
@@ -215,12 +214,10 @@ st.divider()
 st.subheader("📊 Historial de envíos")
 
 if "historial" in st.session_state and st.session_state.historial:
-    # Mostrar como tabla simple sin pandas
     st.write("### Registros:")
     for i, reg in enumerate(st.session_state.historial, 1):
         st.write(f"**{i}.** {reg['Fecha']} | {reg['Hematólogo']} | {reg['Tema']}")
     
-    # Descargar como JSON
     historial_json = json.dumps(st.session_state.historial, ensure_ascii=False, indent=2)
     st.download_button(
         label="📥 Descargar historial (JSON)",
